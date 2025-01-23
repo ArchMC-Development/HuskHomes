@@ -39,8 +39,10 @@ shadowJar {
     relocate 'org.bstats', 'net.william278.huskhomes.libraries.bstats'
     relocate 'io.papermc.lib', 'net.william278.huskhomes.libraries.paperlib'
     relocate 'space.arim.morepaperlib', 'net.william278.huskhomes.libraries.paperlib'
+    relocate 'fr.mrmicky.fastinv', 'net.william278.huskhomes.libraries.fastinv'
+    relocate 'net.wesjd', 'net.william278.huskhomes.libraries'
 
-    minimize()
+    //minimize() // Minimze removes anvilgui packages
 }
 
 tasks {
