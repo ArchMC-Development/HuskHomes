@@ -94,14 +94,19 @@ public class HomeEditMenu extends FastInv {
                                     .ifPresent(user::sendMessage);
                             manager.setHomePosition(home, user.getPosition());
                             update();
+                            open(user.getPlayer());
                         })
                 .bindItem('P', new ItemBuilder(Material.OAK_SIGN)
                                 .name(LegacyText.message("&3Change Home Privacy"))
                                 .lore(LegacyText.message("&3Current: &f" + (home.isPublic() ? "Public" : "Private")))
                                 .build(),
                         e -> {
+                            BukkitHuskHomes.getPlugin(BukkitHuskHomes.class).getLocales()
+                                    .getLocale("edit_home_privacy_%s_success".formatted(home.isPublic() ? "public" : "private"), home.getOwner().getName(), home.getName())
+                                    .ifPresent(user::sendMessage);
                             manager.setHomePrivacy(home, !home.isPublic());
                             update();
+                            open(user.getPlayer());
                         })
                 .bindItem('B', new ItemBuilder(Material.FEATHER)
                         .name(LegacyText.message("&3Go Back"))
