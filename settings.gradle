@@ -25,7 +25,7 @@ include(
 
 
 // Fabric
-include("fabric")
+/*include("fabric")
 project(":fabric").with {
     projectDir = file("fabric/")
     buildFileName = "root.gradle"
@@ -37,4 +37,4 @@ file('fabric').listFiles((FileFilter) ((File file) -> file.isDirectory() && file
         projectDir = file("fabric/${it.name}")
         buildFileName = '../build.gradle'
     }
-}
+} */
