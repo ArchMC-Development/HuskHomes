@@ -45,7 +45,7 @@ public final class LegacyText {
         Matcher matcher = FINAL_LEGACY_PATTERN.matcher(message);
         StringBuilder buffer = new StringBuilder();
 
-        while(matcher.find()) {
+        while (matcher.find()) {
             matcher.appendReplacement(buffer, ChatColor.of("#" + matcher.group(1)).toString());
         }
 
