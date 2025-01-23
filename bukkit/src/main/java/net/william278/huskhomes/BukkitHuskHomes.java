@@ -43,6 +43,7 @@ import net.william278.huskhomes.hook.Hook;
 import net.william278.huskhomes.listener.BukkitEventListener;
 import net.william278.huskhomes.listener.EventListener;
 import net.william278.huskhomes.manager.Manager;
+import net.william278.huskhomes.menus.OverrideListeners;
 import net.william278.huskhomes.network.Broker;
 import net.william278.huskhomes.network.PluginMessageBroker;
 import net.william278.huskhomes.position.Location;
@@ -134,6 +135,8 @@ public class BukkitHuskHomes extends JavaPlugin implements HuskHomes, BukkitTask
         this.morePaperLib = new MorePaperLib(this);
         this.enable();
         this.loadCommands();
+
+        Bukkit.getPluginManager().registerEvents(new OverrideListeners(), this);
     }
 
     @Override
