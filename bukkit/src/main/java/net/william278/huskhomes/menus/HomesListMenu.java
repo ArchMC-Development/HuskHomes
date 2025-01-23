@@ -17,7 +17,6 @@
  *  limitations under the License.
  */
 
-
 package net.william278.huskhomes.menus;
 
 import fr.mrmicky.fastinv.InventoryScheme;
@@ -28,18 +27,16 @@ import net.william278.huskhomes.api.HuskHomesAPI;
 import net.william278.huskhomes.position.Home;
 import net.william278.huskhomes.position.Position;
 import net.william278.huskhomes.teleport.Teleport;
+import net.william278.huskhomes.user.BukkitUser;
 import net.william278.huskhomes.user.OnlineUser;
 import net.william278.huskhomes.util.LegacyText;
 import net.william278.huskhomes.util.TransactionResolver;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author Preva1l
@@ -55,35 +52,50 @@ public class HomesListMenu extends PaginatedFastInv {
             Material.JUNGLE_SIGN,
             Material.WARPED_SIGN
     );
-    private static final Pattern wrapPattern = Pattern.compile("([\\x00-\\xFF]{1,2}|.?){27}");
     private final InventoryScheme scheme;
 
     public HomesListMenu(OnlineUser user, boolean isPublic) {
-        super(6 * 9, "Your Homes");
+        super(4 * 9, "Your" + (isPublic ? " Public " : " ") + "Homes");
 
         this.scheme = new InventoryScheme()
+                .masks(
+                        "XXXXXXXXX",
+                        "XXXXXXXXX",
+                        "XXXXXXXXX",
+                        "000P0N000"
+                )
                 .bindPagination('X')
                 .bindItem('N', new ItemBuilder(Material.ARROW)
                         .name(LegacyText.message("&3Next Page"))
+                        .lore(LegacyText.message("&7Current Page &f%s&7/&f%s".formatted(currentPage(), lastPage() == 0 ? 1 : lastPage())))
                         .build(), e -> openNext())
                 .bindItem('P', new ItemBuilder(Material.ARROW)
                         .name(LegacyText.message("&3Previous Page"))
+                        .lore(LegacyText.message("&7Current Page &f%s&7/&f%s".formatted(currentPage(), lastPage() == 0 ? 1 : lastPage())))
                         .build(), e -> openPrevious());
 
         HuskHomesAPI.getInstance().getUserHomes(user).thenAccept(immutableHomes -> {
-            List<Home> homes = new ArrayList<>(immutableHomes);
-            homes.removeIf(home -> home.isPublic() == !isPublic);
-            for (Home home : homes) {
-                String description = home.getMeta().getDescription().isEmpty() ? "No Description" : textWrap(home.getMeta().getDescription());
+            List<Home> homes = immutableHomes.stream().filter(home -> home.isPublic() == isPublic).toList();
+
+            homes.forEach(home -> {
+                List<String> description = home.getMeta().getDescription().isEmpty() ? List.of("&7No Description") : LegacyText.textWrap(home.getMeta().getDescription());
+                List<String> format = List.of(
+                        "%description%",
+                        "&3Server: &f" + home.getServer(),
+                        "&3World &f" + home.getWorld().getName(),
+                        "&3Location: &f%s&7, &f%s&7, &f%s".formatted((int) home.getX(), (int) home.getY(), (int) home.getZ()),
+                        "",
+                        "&7Left click to teleport",
+                        "&7Right click to edit");
+
                 addContent(new ItemBuilder(randomSign())
                         .name(LegacyText.message(home.getName()))
-                        .lore(LegacyText.list(List.of(
-                                "&f\u24D8 " + description,
-                                "&3Server: &f" + home.getServer(),
-                                "&3World &f" + home.getWorld().getName(),
-                                "&3Location: &f%s&7, &f%s&7, &f%s".formatted((int) home.getX(), (int) home.getY(), (int) home.getZ())
-                        )))
+                        .lore(LegacyText.list(createLore(format, description)))
                         .build(), e -> {
+                    if (e.getClick().isRightClick()) {
+                        new HomeEditMenu((BukkitUser) user, home).open(((BukkitUser) user).getPlayer());
+                        return;
+                    }
                     e.getWhoClicked().closeInventory();
                     Teleport.builder(BukkitHuskHomes.getPlugin(BukkitHuskHomes.class))
                             .type(Teleport.Type.TELEPORT)
@@ -92,8 +104,28 @@ public class HomesListMenu extends PaginatedFastInv {
                             .teleporter(user)
                             .toTimedTeleport().execute();
                 });
+            });
+        }).thenRun(() -> openPage(currentPage()));
+    }
+
+    private List<String> createLore(List<String> format, List<String> description) {
+        List<String> lore = new ArrayList<>();
+        int i = 0;
+        for (String line : format) {
+            if (line.contains("%description%")) {
+                for (String descriptionLine : description) {
+                    if (i == 0) {
+                        descriptionLine = "&f\u24D8 &7" + descriptionLine;
+                    }
+                    lore.add(i, descriptionLine);
+                    i++;
+                }
+                continue;
             }
-        });
+            lore.add(i, line);
+            i++;
+        }
+        return lore;
     }
 
     @Override
@@ -104,17 +136,5 @@ public class HomesListMenu extends PaginatedFastInv {
 
     private Material randomSign() {
         return signs.get(ThreadLocalRandom.current().nextInt(signs.size()));
-    }
-
-    private String textWrap(@NotNull String string) {
-        Matcher matcher = wrapPattern.matcher(string);
-        StringBuilder out = new StringBuilder();
-
-        while (matcher.find()) {
-            if (!matcher.group().trim().isEmpty()) {
-                out.append("&7%s\n".formatted(matcher.group().trim()));
-            }
-        }
-        return String.valueOf(out);
     }
 }

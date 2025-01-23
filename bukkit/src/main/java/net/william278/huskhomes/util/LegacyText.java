@@ -34,6 +34,7 @@ import java.util.regex.Pattern;
 @UtilityClass
 public final class LegacyText {
     private final Pattern FINAL_LEGACY_PATTERN = Pattern.compile("&#(\\w{5}[0-9a-fA-F])");
+    private static final Pattern WRAP_PATTERN = Pattern.compile("([\\x00-\\xFF]{1,2}|.?){20}");
 
     /**
      * Takes a string formatted in minimessage OR legacy and turns it into a legacy String.
@@ -58,5 +59,17 @@ public final class LegacyText {
             legacyList.add(message(s));
         }
         return legacyList;
+    }
+
+    public List<String> textWrap(@NotNull String string) {
+        Matcher matcher = WRAP_PATTERN.matcher(string);
+        List<String> strings = new ArrayList<>();
+
+        while (matcher.find()) {
+            if (!matcher.group().trim().isEmpty()) {
+                strings.add("&7%s\n".formatted(matcher.group().trim()));
+            }
+        }
+        return strings;
     }
 }

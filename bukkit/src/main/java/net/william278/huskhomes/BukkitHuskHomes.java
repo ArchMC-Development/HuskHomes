@@ -22,6 +22,7 @@ package net.william278.huskhomes;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import fr.mrmicky.fastinv.FastInvManager;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -136,7 +137,10 @@ public class BukkitHuskHomes extends JavaPlugin implements HuskHomes, BukkitTask
         this.enable();
         this.loadCommands();
 
+        // ArchMC Start - menus
+        FastInvManager.register(this);
         Bukkit.getPluginManager().registerEvents(new OverrideListeners(), this);
+        // ArchMC end
     }
 
     @Override
