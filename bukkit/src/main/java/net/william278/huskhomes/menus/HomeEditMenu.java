@@ -80,7 +80,7 @@ public class HomeEditMenu extends FastInv {
                                     update();
                                     open(user.getPlayer());
                                 }))
-                .bindItem('L', new ItemBuilder(Material.OAK_SIGN)
+                .bindItem('L', new ItemBuilder(Material.COMPASS)
                                 .name(LegacyText.message("&3Change Home Location"))
                                 .lore(LegacyText.list(List.of(
                                         "&3Server: &f" + home.getServer(),
@@ -96,7 +96,7 @@ public class HomeEditMenu extends FastInv {
                             update();
                             open(user.getPlayer());
                         })
-                .bindItem('P', new ItemBuilder(Material.OAK_SIGN)
+                .bindItem('P', new ItemBuilder(Material.BEACON)
                                 .name(LegacyText.message("&3Change Home Privacy"))
                                 .lore(LegacyText.message("&3Current: &f" + (home.isPublic() ? "Public" : "Private")))
                                 .build(),
