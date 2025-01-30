@@ -17,9 +17,12 @@
  *  limitations under the License.
  */
 
-package net.william278.huskhomes.menus;
+package net.william278.huskhomes.listener;
 
 import net.william278.huskhomes.event.HomeListEvent;
+import net.william278.huskhomes.event.WarpListEvent;
+import net.william278.huskhomes.menus.HomesListMenu;
+import net.william278.huskhomes.menus.WarpListMenu;
 import net.william278.huskhomes.user.BukkitUser;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -31,5 +34,12 @@ public class OverrideListeners implements Listener {
         if (!(event.getListViewer() instanceof BukkitUser onlineUser)) return;
         event.setCancelled(true);
         new HomesListMenu(onlineUser, event.getIsPublicHomeList()).open(onlineUser.getPlayer());
+    }
+
+    @EventHandler
+    public void onWarpListView(@NotNull WarpListEvent event) {
+        if (!(event.getListViewer() instanceof BukkitUser onlineUser)) return;
+        event.setCancelled(true);
+        new WarpListMenu(onlineUser).open(onlineUser.getPlayer());
     }
 }
