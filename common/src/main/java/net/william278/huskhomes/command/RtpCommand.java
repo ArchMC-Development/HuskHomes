@@ -160,6 +160,9 @@ public class RtpCommand extends Command implements UserListTabCompletable {
      */
     private Optional<Map.Entry<World, String>> validateRtp(@NotNull OnlineUser teleporter, @NotNull CommandUser executor,
                                                            @NotNull String worldName, @Nullable String targetServer) {
+        var newWorldName = plugin.getSettings().getRtp().getWorldMappings().get(worldName);
+        if (newWorldName != null) worldName = newWorldName;
+
         // Check permissions if the user is being teleported by another player
         if (!executor.equals(teleporter) && !executor.hasPermission(getPermission("other"))) {
             plugin.getLocales().getLocale("error_no_permission")
@@ -178,11 +181,12 @@ public class RtpCommand extends Command implements UserListTabCompletable {
         }
 
         // Find the local world
+        @NotNull String finalWorldName = worldName;
         final Optional<World> localWorld = plugin.getWorlds().stream().filter((world) -> world
                 .getName().replace("minecraft:", "")
-                .equalsIgnoreCase(worldName)).findFirst();
+                .equalsIgnoreCase(finalWorldName)).findFirst();
         if (localWorld.isEmpty()) {
-            plugin.getLocales().getLocale("error_invalid_world", worldName)
+            plugin.getLocales().getLocale("error_invalid_world", finalWorldName)
                     .ifPresent(executor::sendMessage);
             return Optional.empty();
         }
@@ -193,7 +197,7 @@ public class RtpCommand extends Command implements UserListTabCompletable {
                     .ifPresent(executor::sendMessage);
             return Optional.empty();
         }
-        return localWorld.map(world -> new AbstractMap.SimpleImmutableEntry<>(world, worldName));
+        return localWorld.map(world -> new AbstractMap.SimpleImmutableEntry<>(world, finalWorldName));
     }
 
     /**

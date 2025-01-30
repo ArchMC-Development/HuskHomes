@@ -355,6 +355,10 @@ public final class Settings {
         private Map<String, List<String>> randomTargetServers = new HashMap<>(
                 Map.of("server", List.of("world", "world_nether", "world_the_end"))
         );
+        @Comment("Map key to value, so if the players requesting the world X it actually requests world Y")
+        private Map<String, String> worldMappings = Map.of(
+                "world_lobby", "world"
+        );
     }
 
     @Comment("Action cooldown settings. Docs: https://william278.net/docs/huskhomes/cooldowns")

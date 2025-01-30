@@ -102,7 +102,6 @@ public class PluginMessageBroker extends Broker {
     public void changeServer(@NotNull OnlineUser user, @NotNull String server) {
         user.dismount().thenRun(() -> {
             final ByteArrayDataOutput outputStream = ByteStreams.newDataOutput();
-
             outputStream.writeUTF("Connect");
             outputStream.writeUTF(server);
 
