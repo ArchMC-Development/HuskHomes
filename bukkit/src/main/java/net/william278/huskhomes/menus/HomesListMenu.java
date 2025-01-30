@@ -100,7 +100,7 @@ public class HomesListMenu extends PaginatedFastInv {
                     Teleport.builder(BukkitHuskHomes.getPlugin(BukkitHuskHomes.class))
                             .type(Teleport.Type.TELEPORT)
                             .actions(TransactionResolver.Action.HOME_TELEPORT)
-                            .target(Position.at(home.getX(), home.getY(), home.getZ(), home.getWorld(), home.getServer()))
+                            .target(Position.at(home.getX(), home.getY(), home.getZ(), home.getYaw(), home.getPitch(), home.getWorld(), home.getServer()))
                             .teleporter(user)
                             .toTimedTeleport().execute();
                 });
