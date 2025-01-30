@@ -43,7 +43,6 @@ import java.util.concurrent.CompletableFuture;
  * A cross-platform representation of a logged-in {@link User}.
  */
 public abstract class OnlineUser extends User implements Teleportable, CommandUser {
-
     protected final HuskHomes plugin;
     protected boolean markedAsInvulnerable = false;
 
