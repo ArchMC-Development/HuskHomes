@@ -9,6 +9,9 @@ dependencies {
     implementation 'net.wesjd:anvilgui:1.10.4-SNAPSHOT'
 
     compileOnly 'org.spigotmc:spigot-api:1.17.1-R0.1-SNAPSHOT'
+    compileOnly 'gg.scala.commons:serversync:4.1.1'
+    compileOnly 'gg.scala.commons:serializers:4.1.1'
+    compileOnly 'gg.scala.cloudsync:spigot:1.0.4'
     compileOnly 'org.jetbrains:annotations:26.0.1'
     compileOnly 'net.william278:minedown:1.8.2'
     compileOnly 'net.william278:DesertWell:2.0.4'

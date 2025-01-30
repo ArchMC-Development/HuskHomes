@@ -45,6 +45,7 @@ import net.william278.huskhomes.listener.BukkitEventListener;
 import net.william278.huskhomes.listener.EventListener;
 import net.william278.huskhomes.listener.OverrideListeners;
 import net.william278.huskhomes.manager.Manager;
+import net.william278.huskhomes.menus.SpawnMenu;
 import net.william278.huskhomes.network.Broker;
 import net.william278.huskhomes.network.PluginMessageBroker;
 import net.william278.huskhomes.position.Location;
@@ -287,6 +288,17 @@ public class BukkitHuskHomes extends JavaPlugin implements HuskHomes, BukkitTask
             return;
         }
         getLogger().log(level, message);
+    }
+
+    /**
+     * Open the spawn menu to an online user
+     *
+     * @param onlineUser person to open to
+     */
+    @Override
+    public void openSpawnMenu(@NotNull OnlineUser onlineUser) {
+        if (!(onlineUser instanceof BukkitUser user)) return;
+        getSyncScheduler().run(() -> new SpawnMenu(user, this).open(user.getPlayer()));
     }
 
     @Override

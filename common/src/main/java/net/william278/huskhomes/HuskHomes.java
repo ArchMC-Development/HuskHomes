@@ -37,6 +37,7 @@ import net.william278.huskhomes.position.Position;
 import net.william278.huskhomes.position.World;
 import net.william278.huskhomes.random.RandomTeleportProvider;
 import net.william278.huskhomes.user.ConsoleUser;
+import net.william278.huskhomes.user.OnlineUser;
 import net.william278.huskhomes.user.UserProvider;
 import net.william278.huskhomes.util.*;
 import org.intellij.lang.annotations.Subst;
@@ -237,6 +238,13 @@ public interface HuskHomes extends Task.Supplier, EventDispatcher, SavePositionP
      * @param exceptions any exceptions to log
      */
     void log(@NotNull Level level, @NotNull String message, Throwable... exceptions);
+
+    /**
+     * Open the spawn menu to an online user
+     *
+     * @param onlineUser person to open to
+     */
+    void openSpawnMenu(@NotNull OnlineUser onlineUser);
 
     /**
      * Create a resource key namespaced with the plugin id.

@@ -9,6 +9,14 @@ api-version: '1.19'
 folia-supported: true
 dependencies:
   server:
+    scala-commons:
+      load: BEFORE
+      required: true
+      join-classpath: true
+    cloudsync:
+      load: BEFORE
+      required: true
+      join-classpath: true
     Vault:
       load: BEFORE
       required: false

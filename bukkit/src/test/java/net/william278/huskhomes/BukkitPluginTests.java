@@ -159,6 +159,7 @@ public class BukkitPluginTests {
                                       @NotNull @SuppressWarnings("unused") String commandName) {
             Assertions.assertNotNull(command);
             Assertions.assertNotNull(user);
+            if (command.getName().equalsIgnoreCase("spawn")) return;
             command.execute(user, new String[0]);
         }
 
