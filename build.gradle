@@ -28,30 +28,15 @@ ext {
 
 publishing {
     repositories {
-        if (System.getenv("RELEASES_MAVEN_USERNAME") != null) {
-            maven {
-                name = "william278-releases"
-                url = "https://repo.william278.net/releases"
-                credentials {
-                    username = System.getenv("RELEASES_MAVEN_USERNAME")
-                    password = System.getenv("RELEASES_MAVEN_PASSWORD")
-                }
-                authentication {
-                    basic(BasicAuthentication)
-                }
+        maven {
+            url = property("artifactory_contextUrl") + "/gradle-release"
+            name = "arch"
+            credentials {
+                username = property("artifactory_user").toString()
+                password = property("artifactory_password").toString()
             }
-        }
-        if (System.getenv("SNAPSHOTS_MAVEN_USERNAME") != null) {
-            maven {
-                name = "william278-snapshots"
-                url = "https://repo.william278.net/snapshots"
-                credentials {
-                    username = System.getenv("SNAPSHOTS_MAVEN_USERNAME")
-                    password = System.getenv("SNAPSHOTS_MAVEN_PASSWORD")
-                }
-                authentication {
-                    basic(BasicAuthentication)
-                }
+            authentication {
+                basic(BasicAuthentication)
             }
         }
     }
@@ -132,16 +117,6 @@ subprojects {
         return
     }
 
-    // Project naming
-    version rootProject.version
-    def name = "$rootProject.name"
-    if (rootProject != project.parent) {
-        name += "-${project.parent.name.capitalize()}"
-    } else {
-        name += "-${project.name.capitalize()}"
-    }
-    archivesBaseName = name
-
     // Fabric-specific configuration
     if (project.parent?.name?.equals('fabric')) {
         apply plugin: 'fabric-loom'
@@ -151,70 +126,32 @@ subprojects {
 
     jar {
         from '../LICENSE'
+        archiveClassifier.set('original')
+        archiveFileName = "$rootProject.name-${project.name}-not-a-skibidi-file-use-this-if-you-like-men.jar"
     }
 
     shadowJar {
         destinationDirectory.set(file("$rootDir/target"))
         archiveClassifier.set('')
+        archiveFileName = "$rootProject.name-${project.name}.jar"
     }
 
     // API publishing
-    if (['common', 'bukkit'].contains(project.name) || project.parent?.name?.equals('fabric')) {
-        java {
-            withSourcesJar()
-            withJavadocJar()
-        }
-        sourcesJar {
-            destinationDirectory.set(file("$rootDir/target"))
-        }
-        javadocJar {
-            destinationDirectory.set(file("$rootDir/target"))
-        }
-        shadowJar.dependsOn(sourcesJar, javadocJar)
-
+    if (['paper'].contains(project.name)) {
         publishing {
-            if (['common'].contains(project.name)) {
-                publications {
-                    mavenJavaCommon(MavenPublication) {
-                        groupId = 'net.william278.huskhomes'
-                        artifactId = 'huskhomes-common'
-                        version = "$rootProject.version"
-                        artifact shadowJar
-                        artifact sourcesJar
-                        artifact javadocJar
-                    }
-                }
-            }
-
-            if (['bukkit'].contains(project.name)) {
-                publications {
-                    mavenJavaBukkit(MavenPublication) {
-                        groupId = 'net.william278.huskhomes'
-                        artifactId = 'huskhomes-bukkit'
-                        version = "$rootProject.version"
-                        artifact shadowJar
-                        artifact sourcesJar
-                        artifact javadocJar
-                    }
-                }
-            }
-
-            if (project.parent?.name?.equals('fabric')) {
-                publications {
-                    "mavenJavaFabric_${project.name.replace('.', '_')}"(MavenPublication) {
-                        groupId = 'net.william278.huskhomes'
-                        artifactId = 'huskhomes-fabric'
-                        version = "$rootProject.version+$project.name"
-                        artifact remapJar
-                        artifact sourcesJar
-                        artifact javadocJar
-                    }
+            publications {
+                mavenJava(MavenPublication) {
+                    groupId = 'net.william278.huskhomes'
+                    artifactId = 'Huskhomes-paper'
+                    version = "$rootProject.version"
+                    artifact shadowJar
                 }
             }
         }
+        tasks.getByName("build").dependsOn(publishMavenJavaPublicationToArchRepository)
     }
 
-    jar.dependsOn shadowJar
+    jar.dependsOn(shadowJar)
     clean.delete "$rootDir/target"
 }
 

@@ -1,7 +1,4 @@
-name: 'HuskHomes'
-description: '${description}'
-author: 'William278'
-website: 'https://william278.net/'
+name: 'homes'
 main: 'net.william278.huskhomes.PaperHuskHomes'
 loader: 'net.william278.huskhomes.PaperHuskHomesLoader'
 version: '${version}'
