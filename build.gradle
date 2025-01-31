@@ -10,8 +10,8 @@ plugins {
     id 'java'
 }
 
-group 'net.william278'
-version "$ext.plugin_version${versionMetadata()}"
+group 'net.william278.huskhomes'
+version "$ext.plugin_version"
 description "$ext.plugin_description"
 defaultTasks 'licenseFormat', 'build'
 
@@ -133,6 +133,7 @@ subprojects {
     shadowJar {
         destinationDirectory.set(file("$rootDir/target"))
         archiveClassifier.set('')
+        archiveVersion.set("")
         archiveFileName = "$rootProject.name-${project.name}.jar"
     }
 
@@ -156,23 +157,3 @@ subprojects {
 }
 
 logger.lifecycle("Building HuskHomes ${version} by William278")
-
-@SuppressWarnings('GrMethodMayBeStatic')
-def versionMetadata() {
-    // Require grgit
-    if (grgit == null) {
-        return '-unknown'
-    }
-
-    // If unclean, return the last commit hash with -indev
-    if (!grgit.status().clean) {
-        return '-' + grgit.head().abbreviatedId + '-indev'
-    }
-
-    // Otherwise if this matches a tag, return nothing
-    def tag = grgit.tag.list().find { it.commit.id == grgit.head().id }
-    if (tag != null) {
-        return ''
-    }
-    return '-' + grgit.head().abbreviatedId
-}

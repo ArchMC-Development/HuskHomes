@@ -20,13 +20,22 @@
 package net.william278.huskhomes;
 
 import net.kyori.adventure.audience.Audience;
+import net.william278.huskhomes.features.CloudSyncFeature;
 import net.william278.huskhomes.listener.PaperEventListener;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
 public class PaperHuskHomes extends BukkitHuskHomes {
+    @Override
+    public void onEnable() {
+        super.onEnable();
+        if (Bukkit.getPluginManager().getPlugin("cloudsync") != null) {
+            CloudSyncFeature.INSTANCE.configure();
+        }
+    }
 
     @Override
     @NotNull

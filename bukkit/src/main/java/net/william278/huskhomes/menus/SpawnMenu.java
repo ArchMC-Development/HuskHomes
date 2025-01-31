@@ -57,7 +57,7 @@ public class SpawnMenu extends FastInv {
                     "&7Click to teleport");
 
             addItem(new ItemBuilder(Material.COMPASS)
-                    .name(LegacyText.message(server.getId()))
+                    .name(LegacyText.message("&f" + server.getId()))
                     .lore(LegacyText.list(format))
                     .build(), e -> {
                 Optional<Position> spawnLocation = plugin.getSpawn();

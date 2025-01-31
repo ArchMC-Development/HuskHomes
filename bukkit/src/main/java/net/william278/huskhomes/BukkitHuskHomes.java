@@ -39,7 +39,6 @@ import net.william278.huskhomes.config.Settings;
 import net.william278.huskhomes.config.Spawn;
 import net.william278.huskhomes.database.Database;
 import net.william278.huskhomes.event.BukkitEventDispatcher;
-import net.william278.huskhomes.features.CloudSyncFeature;
 import net.william278.huskhomes.hook.BukkitHookProvider;
 import net.william278.huskhomes.hook.Hook;
 import net.william278.huskhomes.listener.BukkitEventListener;
@@ -143,9 +142,6 @@ public class BukkitHuskHomes extends JavaPlugin implements HuskHomes, BukkitTask
         FastInvManager.register(this);
         Bukkit.getPluginManager().registerEvents(new OverrideListeners(), this);
         // ArchMC end
-        if (Bukkit.getPluginManager().getPlugin("cloudsync") != null) {
-            CloudSyncFeature.INSTANCE.configure();
-        }
     }
 
     @Override
