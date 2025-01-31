@@ -37,6 +37,6 @@ public final class CloudSyncFeature {
     @Configure
     public void configure() {
         CloudSyncDiscoveryService.INSTANCE.getDiscoverable().getAssets()
-                .add("net.william278:bukkit:HuskHomes-paper");
+                .add("net.william278:bukkit:Huskhomes-paper");
     }
 }
