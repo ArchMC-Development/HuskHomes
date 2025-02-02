@@ -19,6 +19,7 @@
 
 package net.william278.huskhomes.menus;
 
+import com.google.common.base.CharMatcher;
 import fr.mrmicky.fastinv.FastInv;
 import fr.mrmicky.fastinv.ItemBuilder;
 import gg.scala.commons.agnostic.sync.server.ServerContainer;
@@ -34,6 +35,7 @@ import net.william278.huskhomes.util.TransactionResolver;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryType;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -46,6 +48,7 @@ public class SpawnMenu extends FastInv {
                 .map(GameServer.class::cast)
                 .filter(server -> server.getState() == ServerState.Loaded)
                 .filter(server -> server.getWhitelisted() != null && !server.getWhitelisted())
+                .sorted(Comparator.comparingInt(s -> Integer.parseInt(CharMatcher.inRange('0', '9').retainFrom(s.getId()))))
                 .toList();
 
         AtomicInteger i = new AtomicInteger();
