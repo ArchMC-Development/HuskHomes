@@ -82,7 +82,10 @@ public class Teleport implements Completable {
      * @throws TeleportationException if the teleport fails for some reason.
      */
     public void execute() throws TeleportationException {
-        if (!teleporter.isValid()) throw new TeleportationException(TeleportationException.Type.TELEPORTER_NOT_VALID, plugin);
+        if (!teleporter.isValid())
+            throw new TeleportationException(TeleportationException.Type.TELEPORTER_NOT_VALID, plugin);
+        if (!validateLocation())
+            throw new TeleportationException(TeleportationException.Type.ILLEGAL_TARGET_COORDINATES, plugin);
         validateTransactions();
         resolveLocalTeleporter().ifPresentOrElse(this::executeLocal, this::executeRemote);
     }
@@ -161,6 +164,16 @@ public class Teleport implements Completable {
                     .payload(Payload.position((Position) target))
                     .build().send(b, executor);
         }));
+    }
+
+    private boolean validateLocation() {
+        if (target instanceof Position position) {
+            if (position.getY() <= 0) {
+                return teleporter.newWorldGenerationSupported();
+            }
+            return true;
+        }
+        return true;
     }
 
     @NotNull

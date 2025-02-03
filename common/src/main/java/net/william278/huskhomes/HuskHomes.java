@@ -33,6 +33,7 @@ import net.william278.huskhomes.hook.PluginHook;
 import net.william278.huskhomes.listener.ListenerProvider;
 import net.william278.huskhomes.manager.ManagerProvider;
 import net.william278.huskhomes.network.BrokerProvider;
+import net.william278.huskhomes.position.Location;
 import net.william278.huskhomes.position.Position;
 import net.william278.huskhomes.position.World;
 import net.william278.huskhomes.random.RandomTeleportProvider;
@@ -245,6 +246,8 @@ public interface HuskHomes extends Task.Supplier, EventDispatcher, SavePositionP
      * @param onlineUser person to open to
      */
     void openSpawnMenu(@NotNull OnlineUser onlineUser);
+
+    int getSafeY(@NotNull Location location);
 
     /**
      * Create a resource key namespaced with the plugin id.

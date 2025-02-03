@@ -143,8 +143,15 @@ public abstract class EventListener {
             }
 
             try {
+                Position position = (Position) teleport.getTarget();
+
+                if (position.getY() <= 0 && !teleporter.newWorldGenerationSupported()) {
+                    position.setY(plugin.getSafeY(position));
+                    teleporter.sendMessage(new MineDown("[Warning:](#ff3300) [The location you teleported to was unsafe, you have been put to the surface.](#ff7e5e)"));
+                }
+
                 teleporter.teleportLocally(
-                        (Position) teleport.getTarget(),
+                        position,
                         plugin.getSettings().getGeneral().isTeleportAsync()
                 );
             } catch (TeleportationException e) {

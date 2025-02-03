@@ -302,6 +302,11 @@ public class BukkitHuskHomes extends JavaPlugin implements HuskHomes, BukkitTask
     }
 
     @Override
+    public int getSafeY(@NotNull Location location) {
+        return Adapter.adapt(location).getWorld().getHighestBlockYAt((int) location.getX(), (int) location.getZ());
+    }
+
+    @Override
     public void onPluginMessageReceived(@NotNull String channel, @NotNull Player player, byte[] message) {
         if (broker != null && broker instanceof PluginMessageBroker pluginMessenger &&
             getSettings().getCrossServer().getBrokerType() == Broker.Type.PLUGIN_MESSAGE) {

@@ -81,7 +81,8 @@ public class TeleportationException extends IllegalStateException {
         WORLD_NOT_FOUND,
         ILLEGAL_TARGET_COORDINATES,
         CANNOT_TELEPORT_TO_SELF,
-        TELEPORTER_NOT_VALID
+        TELEPORTER_NOT_VALID,
+        LOCATION_NOT_SUPPORTED
     }
 
 }

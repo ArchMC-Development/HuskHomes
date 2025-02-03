@@ -19,6 +19,7 @@
 
 package net.william278.huskhomes.user;
 
+import gg.scala.commons.protocol.impl.util.viaversion.ViaVersionUtil;
 import io.papermc.lib.PaperLib;
 import net.william278.huskhomes.BukkitHuskHomes;
 import net.william278.huskhomes.network.PluginMessageBroker;
@@ -183,5 +184,15 @@ public class BukkitUser extends OnlineUser {
     @Override
     public boolean isValid() {
         return bukkitPlayer.isValid() && bukkitPlayer.getType().isAlive() && getHealth() > 0;
+    }
+
+    /**
+     * Check if the teleporter supports going under y=0.
+     *
+     * @return true if they are on 1.18 or newer
+     */
+    @Override
+    public boolean newWorldGenerationSupported() {
+        return ViaVersionUtil.getProtocolVersion(bukkitPlayer) >= 757;
     }
 }

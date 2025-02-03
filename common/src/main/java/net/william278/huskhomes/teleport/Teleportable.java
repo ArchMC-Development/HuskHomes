@@ -56,6 +56,13 @@ public interface Teleportable {
      */
     boolean isValid();
 
+    /**
+     * Check if the teleporter supports going under y=0.
+     *
+     * @return true if they are on 1.18 or newer
+     */
+    boolean newWorldGenerationSupported();
+
     @NotNull
     @Deprecated(since = "4.8")
     default String getUsername() {
