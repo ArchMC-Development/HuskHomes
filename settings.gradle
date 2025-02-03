@@ -14,7 +14,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'HuskHomes'
+rootProject.name = 'Huskhomes'
 include(
         'common',
 
