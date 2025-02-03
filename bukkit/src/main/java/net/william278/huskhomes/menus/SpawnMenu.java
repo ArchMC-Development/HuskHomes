@@ -32,6 +32,7 @@ import net.william278.huskhomes.teleport.Teleport;
 import net.william278.huskhomes.user.OnlineUser;
 import net.william278.huskhomes.util.LegacyText;
 import net.william278.huskhomes.util.TransactionResolver;
+import org.apache.commons.text.WordUtils;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryType;
 
@@ -48,7 +49,8 @@ public class SpawnMenu extends FastInv {
                 .map(GameServer.class::cast)
                 .filter(server -> server.getState() == ServerState.Loaded)
                 .filter(server -> server.getWhitelisted() != null && !server.getWhitelisted())
-                .sorted(Comparator.comparingInt(s -> Integer.parseInt(CharMatcher.inRange('0', '9').retainFrom(s.getId()))))
+                .sorted(Comparator.comparingInt(s ->
+                        Integer.parseInt(CharMatcher.inRange('0', '9').retainFrom(s.getId()))))
                 .toList();
 
         AtomicInteger i = new AtomicInteger();
@@ -59,13 +61,15 @@ public class SpawnMenu extends FastInv {
                     "",
                     "&7Click to teleport");
 
+            var serverName = WordUtils.capitalize(server.getId().replace("-", " "));
             addItem(new ItemBuilder(Material.COMPASS)
-                    .name(LegacyText.message("&f" + server.getId()))
+                    .name(LegacyText.message("&f" + serverName))
                     .lore(LegacyText.list(format))
                     .build(), e -> {
                 Optional<Position> spawnLocation = plugin.getSpawn();
                 if (spawnLocation.isEmpty()) {
-                    plugin.getLocales().getLocale("").ifPresent(user::sendMessage);
+                    plugin.getLocales().getLocale("error_spawn_not_set")
+                            .ifPresent(user::sendMessage);
                     return;
                 }
                 Position spawn = spawnLocation.get();
