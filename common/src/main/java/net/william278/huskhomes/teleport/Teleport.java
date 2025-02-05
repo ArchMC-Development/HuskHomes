@@ -219,6 +219,7 @@ public class Teleport implements Completable {
         TELEPORT(0),
         RESPAWN(1),
         BACK(2),
+        PORTAL(4),
         RANDOM_TELEPORT(3);
 
         private final int typeId;
