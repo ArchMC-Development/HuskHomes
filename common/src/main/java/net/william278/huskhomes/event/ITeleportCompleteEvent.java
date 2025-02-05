@@ -35,4 +35,6 @@ public interface ITeleportCompleteEvent extends Event {
      */
     @NotNull
     Teleport getTeleport();
+
+    void setTeleport(Teleport teleport);
 }
