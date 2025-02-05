@@ -36,5 +36,15 @@ public interface ITeleportCompleteEvent extends Event {
     @NotNull
     Teleport getTeleport();
 
-    void setTeleport(Teleport teleport);
+    double updatedX();
+
+    void updateX(double x);
+
+    double updatedY();
+
+    void updateY(double y);
+
+    double updatedZ();
+
+    void updateZ(double z);
 }

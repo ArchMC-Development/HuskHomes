@@ -33,8 +33,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public class TeleportCompleteEvent extends Event implements ITeleportCompleteEvent  {
     private static final HandlerList HANDLER_LIST = new HandlerList();
-
-    private Teleport teleport;
+    private final Teleport teleport;
+    private double updatedX = 0d;
+    private double updatedY = 0d;
+    private double updatedZ = 0d;
 
     public TeleportCompleteEvent(@NotNull Teleport teleport) {
         this.teleport = teleport;
@@ -45,8 +47,34 @@ public class TeleportCompleteEvent extends Event implements ITeleportCompleteEve
         return teleport;
     }
 
-    public void setTeleport(Teleport newTeleport) {
-        teleport = newTeleport;
+    @Override
+    public double updatedX() {
+        return updatedX;
+    }
+
+    @Override
+    public void updateX(double x) {
+        updatedX = x;
+    }
+
+    @Override
+    public double updatedY() {
+        return updatedY;
+    }
+
+    @Override
+    public void updateY(double y) {
+        updatedY = y;
+    }
+
+    @Override
+    public double updatedZ() {
+        return updatedZ;
+    }
+
+    @Override
+    public void updateZ(double z) {
+        updatedZ = z;
     }
 
     @NotNull

@@ -151,16 +151,15 @@ public abstract class EventListener {
                 }
 
                 plugin.fireEvent(plugin.getTeleportCompleteEvent(teleport), event -> {
-                    Position updated = (Position) event.getTeleport().getTarget();
-                    position.setX(updated.getX());
-                    position.setY(updated.getY());
-                    position.setZ(updated.getZ());
-                });
+                    position.setX(event.updatedX());
+                    position.setY(event.updatedY());
+                    position.setZ(event.updatedZ());
 
-                teleporter.teleportLocally(
-                        position,
-                        plugin.getSettings().getGeneral().isTeleportAsync()
-                );
+                    teleporter.teleportLocally(
+                            position,
+                            plugin.getSettings().getGeneral().isTeleportAsync()
+                    );
+                });
             } catch (TeleportationException e) {
                 e.displayMessage(teleporter);
             }
