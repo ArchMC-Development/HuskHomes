@@ -160,6 +160,8 @@ public abstract class EventListener {
             plugin.getDatabase().clearCurrentTeleport(teleporter);
             teleport.displayTeleportingComplete(teleporter);
             teleporter.handleInvulnerability();
+
+            plugin.fireEvent(plugin.getTeleportCompleteEvent(teleport), a -> {});
         });
     }
 

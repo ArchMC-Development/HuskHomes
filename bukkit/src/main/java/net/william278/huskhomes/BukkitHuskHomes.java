@@ -39,6 +39,8 @@ import net.william278.huskhomes.config.Settings;
 import net.william278.huskhomes.config.Spawn;
 import net.william278.huskhomes.database.Database;
 import net.william278.huskhomes.event.BukkitEventDispatcher;
+import net.william278.huskhomes.event.ITeleportCompleteEvent;
+import net.william278.huskhomes.event.TeleportCompleteEvent;
 import net.william278.huskhomes.hook.BukkitHookProvider;
 import net.william278.huskhomes.hook.Hook;
 import net.william278.huskhomes.listener.BukkitEventListener;
@@ -52,6 +54,7 @@ import net.william278.huskhomes.position.Location;
 import net.william278.huskhomes.position.Position;
 import net.william278.huskhomes.position.World;
 import net.william278.huskhomes.random.RandomTeleportEngine;
+import net.william278.huskhomes.teleport.Teleport;
 import net.william278.huskhomes.user.*;
 import net.william278.huskhomes.util.BukkitSavePositionProvider;
 import net.william278.huskhomes.util.BukkitTask;
@@ -341,6 +344,11 @@ public class BukkitHuskHomes extends JavaPlugin implements HuskHomes, BukkitTask
         if (database != null) {
             database.close();
         }
+    }
+
+    @Override
+    public @NotNull ITeleportCompleteEvent getTeleportCompleteEvent(@NotNull Teleport teleport) {
+        return new TeleportCompleteEvent(teleport);
     }
 
     @Override

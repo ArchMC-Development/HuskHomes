@@ -20,6 +20,7 @@
 package net.william278.huskhomes.features;
 
 import gg.scala.cloudsync.shared.discovery.CloudSyncDiscoveryService;
+import gg.scala.commons.agnostic.sync.ServerSync;
 import gg.scala.commons.annotations.plugin.SoftDependency;
 import gg.scala.flavor.service.Configure;
 import gg.scala.flavor.service.Service;
@@ -36,7 +37,11 @@ public final class CloudSyncFeature {
 
     @Configure
     public void configure() {
+        String extra;
+        if (ServerSync.INSTANCE.getLocalGameServer().getGroups().contains("dev")) {
+            extra = ":gradle-dev";
+        } else extra = "";
         CloudSyncDiscoveryService.INSTANCE.getDiscoverable().getAssets()
-                .add("net.william278.huskhomes:Huskhomes-paper:Huskhomes-paper");
+                .add("net.william278.huskhomes:Huskhomes-paper:Huskhomes-paper" + extra);
     }
 }
