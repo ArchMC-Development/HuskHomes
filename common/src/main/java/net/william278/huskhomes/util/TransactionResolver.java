@@ -194,7 +194,6 @@ public interface TransactionResolver {
         WARP_TELEPORT,
         SPAWN_TELEPORT,
         PORTAL_TELEPORT,
-        NETHER_PORTAL,
 
         /*
          * Teleport request actions
