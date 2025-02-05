@@ -193,6 +193,7 @@ public interface TransactionResolver {
         PUBLIC_HOME_TELEPORT,
         WARP_TELEPORT,
         SPAWN_TELEPORT,
+        PORTAL_TELEPORT,
 
         /*
          * Teleport request actions
