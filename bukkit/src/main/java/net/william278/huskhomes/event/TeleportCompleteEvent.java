@@ -34,9 +34,9 @@ import org.jetbrains.annotations.NotNull;
 public class TeleportCompleteEvent extends Event implements ITeleportCompleteEvent  {
     private static final HandlerList HANDLER_LIST = new HandlerList();
     private final Teleport teleport;
-    private double updatedX = 0d;
-    private double updatedY = 0d;
-    private double updatedZ = 0d;
+    private double updatedX = 0.69d;
+    private double updatedY = 0.69d;
+    private double updatedZ = 0.69d;
 
     public TeleportCompleteEvent(@NotNull Teleport teleport) {
         this.teleport = teleport;

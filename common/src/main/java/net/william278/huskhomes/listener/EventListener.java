@@ -151,9 +151,9 @@ public abstract class EventListener {
                 }
 
                 plugin.fireEvent(plugin.getTeleportCompleteEvent(teleport), event -> {
-                    position.setX(event.updatedX());
-                    position.setY(event.updatedY());
-                    position.setZ(event.updatedZ());
+                    position.setX(event.updatedX() == 0.69d ? position.getX() : event.updatedX());
+                    position.setY(event.updatedY() == 0.69d ? position.getY() : event.updatedY());
+                    position.setZ(event.updatedZ() == 0.69d ? position.getZ() : event.updatedZ());
 
                     teleporter.teleportLocally(
                             position,
