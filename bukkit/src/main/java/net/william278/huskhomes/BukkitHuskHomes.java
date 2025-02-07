@@ -23,9 +23,13 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import fr.mrmicky.fastinv.FastInvManager;
+import gg.scala.commons.agnostic.sync.server.ServerContainer;
+import gg.scala.commons.agnostic.sync.server.impl.GameServer;
+import gg.scala.commons.agnostic.sync.server.state.ServerState;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.val;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.AudienceProvider;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -252,6 +256,23 @@ public class BukkitHuskHomes extends JavaPlugin implements HuskHomes, BukkitTask
         commands.stream().peek(this.commands::add)
                 .map(c -> new BukkitCommand(c, getPlugin()))
                 .forEach(BukkitCommand::register);
+    }
+
+    @Override
+    public Optional<Position> getSpawn() {
+        List<GameServer> servers = ServerContainer.INSTANCE.getServersInGroup("survival-spawn")
+                .stream()
+                .map(GameServer.class::cast)
+                .filter(server -> server.getState() == ServerState.Loaded)
+                .filter(server -> server.getWhitelisted() != null && !server.getWhitelisted())
+                .sorted(Comparator.comparingInt(GameServer::getPlayersCount))
+                .toList();
+
+        val a = getDatabase().getWarp(getSettings().getCrossServer().getGlobalSpawn().getWarpName());
+        if (a.isEmpty()) return Optional.empty();
+        a.get().setServer(servers.get(0).getId());
+
+        return a.map(warp -> warp);
     }
 
     @Override

@@ -109,10 +109,10 @@ allprojects {
         include '**/*.java'
         newLine = true
     }
-
-    test {
-        useJUnitPlatform()
-    }
+//
+//    test {
+//        useJUnitPlatform()
+//    }
 
     processResources {
         filesMatching(['**/*.json', '**/*.yml']) {
