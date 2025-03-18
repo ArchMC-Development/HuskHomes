@@ -111,7 +111,11 @@ public interface CommandProvider {
         commands.add(new TpAllCommand(getPlugin()));
         commands.add(new SpawnCommand(getPlugin()));
         commands.add(new SetSpawnCommand(getPlugin()));
-        commands.add(new BackCommand(getPlugin()));
+        // ArchMC start - handle inside of Rootkit
+
+        //commands.add(new BackCommand(getPlugin()));
+
+        // ArchMC end
         commands.add(new HuskHomesCommand(getPlugin()));
 
         // Filter, sort, and register

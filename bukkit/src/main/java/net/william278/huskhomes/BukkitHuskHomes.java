@@ -101,6 +101,9 @@ public class BukkitHuskHomes extends JavaPlugin implements HuskHomes, BukkitTask
     private final Map<String, List<User>> globalUserList = Maps.newConcurrentMap();
     private final List<Command> commands = Lists.newArrayList();
 
+    @Getter @Setter
+    public static BukkitHuskHomes instance;
+
     @Setter
     private Set<Hook> hooks = Sets.newHashSet();
     @Setter
@@ -140,6 +143,7 @@ public class BukkitHuskHomes extends JavaPlugin implements HuskHomes, BukkitTask
 
     @Override
     public void onEnable() {
+        instance = this;
         this.audiences = BukkitAudiences.create(this);
         this.morePaperLib = new MorePaperLib(this);
         this.enable();
