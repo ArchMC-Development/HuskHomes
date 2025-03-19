@@ -6,6 +6,7 @@ depend:
   - scala-commons
   - cloudsync
 softdepend:
+  - LuckPerms
   - Vault
   - PlaceholderAPI
   - dynmap

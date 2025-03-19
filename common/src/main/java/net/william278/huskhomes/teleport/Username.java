@@ -66,13 +66,13 @@ public record Username(@NotNull String name) implements Teleportable, Target {
     }
 
     /**
-     * Check if the teleporter is able to be teleported.
+     * Check if the teleporter can teleport.
      *
-     * @return true if they can teleport
+     * @return true if the teleport may complete.
      */
     @Override
     public boolean isValid() {
-        return false;
+        return true;
     }
 
     /**

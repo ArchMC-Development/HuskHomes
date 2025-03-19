@@ -71,7 +71,7 @@ public class WarpListMenu extends PaginatedFastInv {
                         .build(), e -> openPrevious());
 
         HuskHomesAPI.getInstance().getWarps().thenAccept(immutableWarps -> {
-            List<Warp> warps = immutableWarps.stream().filter(warp -> user.getPlayer().hasPermission(warp.getPermission())).toList();
+            List<Warp> warps = immutableWarps.stream().filter(warp -> warp.hasPermission(user)).toList();
             warps.forEach(warp -> {
                 List<String> description = warp.getMeta().getDescription().isEmpty() ? List.of("&7No Description") : LegacyText.textWrap(warp.getMeta().getDescription());
                 List<String> format = List.of(

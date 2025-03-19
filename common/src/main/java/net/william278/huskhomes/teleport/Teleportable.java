@@ -50,9 +50,9 @@ public interface Teleportable {
     String getName();
 
     /**
-     * Check if the teleporter is able to be teleported.
+     * Check if the teleporter can teleport.
      *
-     * @return true if they can teleport
+     * @return true if the teleport may complete.
      */
     boolean isValid();
 

@@ -212,7 +212,7 @@ public class RedisBroker extends PluginMessageBroker {
 
             if (message.getTarget().equals(broker.plugin.getServerName())
                 || message.getTarget().equals(Message.TARGET_ALL)) {
-                
+
                 if (message.getType() == Message.MessageType.REQUEST_RTP_LOCATION) {
                     broker.handleRtpRequestLocation(message);
                     return;
