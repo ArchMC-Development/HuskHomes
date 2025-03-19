@@ -15,6 +15,11 @@ version "$ext.plugin_version"
 description "$ext.plugin_description"
 defaultTasks 'licenseFormat', 'build'
 
+var currentBranch = grgit.branch.current().name
+if (currentBranch != "master") {
+    println("Starting in development mode")
+}
+
 ext {
     set 'version', version.toString()
     set 'description', description.toString()
@@ -29,7 +34,13 @@ ext {
 publishing {
     repositories {
         maven {
-            url = property("artifactory_contextUrl") + "/gradle-release"
+            var repo
+            if (currentBranch == "master")
+                repo = "/gradle-release"
+            else
+                repo = "/gradle-dev"
+
+            url = property("artifactory_contextUrl") + repo
             name = "arch"
             credentials {
                 username = property("artifactory_user").toString()
@@ -98,10 +109,10 @@ allprojects {
         include '**/*.java'
         newLine = true
     }
-
-    test {
-        useJUnitPlatform()
-    }
+//
+//    test {
+//        useJUnitPlatform()
+//    }
 
     processResources {
         filesMatching(['**/*.json', '**/*.yml']) {

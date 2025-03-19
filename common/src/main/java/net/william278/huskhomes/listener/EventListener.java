@@ -150,10 +150,16 @@ public abstract class EventListener {
                     teleporter.sendMessage(new MineDown("[Warning:](#ff3300) [The location you teleported to was unsafe, you have been put to the surface.](#ff7e5e)"));
                 }
 
-                teleporter.teleportLocally(
-                        position,
-                        plugin.getSettings().getGeneral().isTeleportAsync()
-                );
+                plugin.fireEvent(plugin.getTeleportCompleteEvent(teleport), event -> {
+                    position.setX(event.updatedX() == 0.69d ? position.getX() : event.updatedX());
+                    position.setY(event.updatedY() == 0.69d ? position.getY() : event.updatedY());
+                    position.setZ(event.updatedZ() == 0.69d ? position.getZ() : event.updatedZ());
+
+                    teleporter.teleportLocally(
+                            position,
+                            plugin.getSettings().getGeneral().isTeleportAsync()
+                    );
+                });
             } catch (TeleportationException e) {
                 e.displayMessage(teleporter);
             }

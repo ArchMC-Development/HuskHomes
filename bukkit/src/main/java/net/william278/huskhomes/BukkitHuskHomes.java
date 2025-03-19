@@ -23,9 +23,13 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import fr.mrmicky.fastinv.FastInvManager;
+import gg.scala.commons.agnostic.sync.server.ServerContainer;
+import gg.scala.commons.agnostic.sync.server.impl.GameServer;
+import gg.scala.commons.agnostic.sync.server.state.ServerState;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.val;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.AudienceProvider;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -39,6 +43,8 @@ import net.william278.huskhomes.config.Settings;
 import net.william278.huskhomes.config.Spawn;
 import net.william278.huskhomes.database.Database;
 import net.william278.huskhomes.event.BukkitEventDispatcher;
+import net.william278.huskhomes.event.ITeleportCompleteEvent;
+import net.william278.huskhomes.event.TeleportCompleteEvent;
 import net.william278.huskhomes.hook.BukkitHookProvider;
 import net.william278.huskhomes.hook.Hook;
 import net.william278.huskhomes.listener.BukkitEventListener;
@@ -52,6 +58,7 @@ import net.william278.huskhomes.position.Location;
 import net.william278.huskhomes.position.Position;
 import net.william278.huskhomes.position.World;
 import net.william278.huskhomes.random.RandomTeleportEngine;
+import net.william278.huskhomes.teleport.Teleport;
 import net.william278.huskhomes.user.*;
 import net.william278.huskhomes.util.BukkitSavePositionProvider;
 import net.william278.huskhomes.util.BukkitTask;
@@ -94,6 +101,9 @@ public class BukkitHuskHomes extends JavaPlugin implements HuskHomes, BukkitTask
     private final Map<String, List<User>> globalUserList = Maps.newConcurrentMap();
     private final List<Command> commands = Lists.newArrayList();
 
+    @Getter @Setter
+    public static BukkitHuskHomes instance;
+
     @Setter
     private Set<Hook> hooks = Sets.newHashSet();
     @Setter
@@ -133,6 +143,7 @@ public class BukkitHuskHomes extends JavaPlugin implements HuskHomes, BukkitTask
 
     @Override
     public void onEnable() {
+        instance = this;
         this.audiences = BukkitAudiences.create(this);
         this.morePaperLib = new MorePaperLib(this);
         this.enable();
@@ -252,6 +263,23 @@ public class BukkitHuskHomes extends JavaPlugin implements HuskHomes, BukkitTask
     }
 
     @Override
+    public Optional<Position> getSpawn() {
+        List<GameServer> servers = ServerContainer.INSTANCE.getServersInGroup("survival-spawn")
+                .stream()
+                .map(GameServer.class::cast)
+                .filter(server -> server.getState() == ServerState.Loaded)
+                .filter(server -> server.getWhitelisted() != null && !server.getWhitelisted())
+                .sorted(Comparator.comparingInt(GameServer::getPlayersCount))
+                .toList();
+
+        val a = getDatabase().getWarp(getSettings().getCrossServer().getGlobalSpawn().getWarpName());
+        if (a.isEmpty()) return Optional.empty();
+        a.get().setServer(servers.get(0).getId());
+
+        return a.map(warp -> warp);
+    }
+
+    @Override
     public Optional<Spawn> getServerSpawn() {
         return Optional.ofNullable(serverSpawn);
     }
@@ -341,6 +369,11 @@ public class BukkitHuskHomes extends JavaPlugin implements HuskHomes, BukkitTask
         if (database != null) {
             database.close();
         }
+    }
+
+    @Override
+    public @NotNull ITeleportCompleteEvent getTeleportCompleteEvent(@NotNull Teleport teleport) {
+        return new TeleportCompleteEvent(teleport);
     }
 
     @Override

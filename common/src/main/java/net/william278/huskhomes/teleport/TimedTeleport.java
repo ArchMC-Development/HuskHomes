@@ -179,7 +179,7 @@ public class TimedTeleport extends Teleport implements Runnable, Completable {
     }
 
     private boolean hasTeleporterMoved() {
-        final double maxMovementDistance = 0.1d;
+        final double maxMovementDistance = 0.8d;
         double movementDistance = Math.abs(startLocation.getX() - teleporter.getPosition().getX())
                 + Math.abs(startLocation.getY() - teleporter.getPosition().getY())
                 + Math.abs(startLocation.getZ() - teleporter.getPosition().getZ());

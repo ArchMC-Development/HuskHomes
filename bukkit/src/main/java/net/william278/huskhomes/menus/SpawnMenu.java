@@ -25,7 +25,6 @@ import fr.mrmicky.fastinv.ItemBuilder;
 import gg.scala.commons.agnostic.sync.server.ServerContainer;
 import gg.scala.commons.agnostic.sync.server.impl.GameServer;
 import gg.scala.commons.agnostic.sync.server.state.ServerState;
-import net.william278.huskhomes.BukkitHuskHomes;
 import net.william278.huskhomes.HuskHomes;
 import net.william278.huskhomes.position.Position;
 import net.william278.huskhomes.teleport.Teleport;
@@ -54,7 +53,7 @@ public class SpawnMenu extends FastInv {
                 .toList();
 
         AtomicInteger i = new AtomicInteger();
-        servers.forEach(server -> {
+        plugin.runAsync(() -> servers.forEach(server -> {
             if (i.getAndIncrement() == 4) return;
             List<String> format = List.of(
                     "&3Players: &f" + server.getPlayersCount(),
@@ -76,13 +75,13 @@ public class SpawnMenu extends FastInv {
                 spawn.setServer(server.getId());
 
                 e.getWhoClicked().closeInventory();
-                Teleport.builder(BukkitHuskHomes.getPlugin(BukkitHuskHomes.class))
+                Teleport.builder(plugin)
                         .type(Teleport.Type.TELEPORT)
                         .actions(TransactionResolver.Action.SPAWN_TELEPORT)
                         .target(spawn)
                         .teleporter(user)
                         .toTimedTeleport().execute();
             });
-        });
+        }));
     }
 }

@@ -71,6 +71,9 @@ public interface EventDispatcher {
     ITeleportEvent getTeleportEvent(@NotNull Teleport teleport);
 
     @NotNull
+    ITeleportCompleteEvent getTeleportCompleteEvent(@NotNull Teleport teleport);
+
+    @NotNull
     ITeleportWarmupEvent getTeleportWarmupEvent(@NotNull TimedTeleport teleport, int duration);
 
     @NotNull
